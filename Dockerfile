@@ -6,9 +6,6 @@ WORKDIR /usr/src/app
 # Copy workspace manifest and lockfile first for better layer caching
 COPY Cargo.toml Cargo.lock ./
 
-# Copy all service directories (needed for workspace resolution)
-COPY services/ ./services/
-
 # Build the timer-service binary
 RUN cargo build --release --bin timer-service
 
