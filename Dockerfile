@@ -4,7 +4,7 @@ FROM rust:1.85 as builder
 WORKDIR /usr/src/app
 
 # 1. Creiamo un progetto vuoto
-RUN USER=root cargo new --bin timer-service
+RUN USER=root cargo new --bin timer-service 
 WORKDIR /usr/src/app/timer-service
 
 # 2. Copiamo il manifesto E la dipendenza locale 'migration'
