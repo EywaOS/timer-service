@@ -1,0 +1,4 @@
+database_url = "postgres://eywa:eywa_secret_password@localhost:5432/eywa_auth"
+jwt_secret = "dev_secret_change_this_before_production_at_least_64_chars_long!!!"
+jwt_issuer = "eywa-auth-service"
+rust_log = "debug"

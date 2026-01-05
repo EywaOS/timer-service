@@ -1,0 +1,23 @@
+[package]
+name = "timer-service"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+eywa-axum = { workspace = true }
+migration = { path = "migration", package = "timer-service-migration" }
+
+tokio = { workspace = true, features = ["full"] }
+serde = { workspace = true }
+chrono = { workspace = true }
+uuid = { workspace = true }
+# Direct deps for macros (required by compiler even if re-exported)
+sea-orm = { workspace = true, features = [
+    "sqlx-postgres",
+    "runtime-tokio-rustls",
+    "macros",
+] }
+dotenvy = "0.15"
+axum = { workspace = true }
+utoipa = { workspace = true }
+tracing-subscriber = { workspace = true }
