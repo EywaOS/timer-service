@@ -9,16 +9,17 @@ impl MigrationTrait for Migration {
         let db = manager.get_connection();
 
         // Create schema 'tsaheylu'
-        db.execute_unprepared("CREATE SCHEMA IF NOT EXISTS tsaheylu").await?;
+        db.execute_unprepared("CREATE SCHEMA IF NOT EXISTS tsaheylu")
+            .await?;
 
         // Create time_entries table
         db.execute_unprepared(
             r#"
             CREATE TABLE IF NOT EXISTS tsaheylu.time_entries (
                 id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-                user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
-                project_id UUID REFERENCES core.projects(id) ON DELETE SET NULL,
-                tag_id UUID REFERENCES core.tags(id) ON DELETE SET NULL,
+                user_id UUID NOT NULL,
+                project_id UUID,
+                tag_id UUID,
                 start_time TIMESTAMPTZ NOT NULL DEFAULT NOW(),
                 end_time TIMESTAMPTZ,
                 duration_seconds BIGINT,
@@ -42,8 +43,10 @@ impl MigrationTrait for Migration {
     async fn down(&self, manager: &SchemaManager) -> Result<(), DbErr> {
         let db = manager.get_connection();
 
-        db.execute_unprepared("DROP TABLE IF EXISTS tsaheylu.time_entries").await?;
-        db.execute_unprepared("DROP SCHEMA IF EXISTS tsaheylu").await?;
+        db.execute_unprepared("DROP TABLE IF EXISTS tsaheylu.time_entries")
+            .await?;
+        db.execute_unprepared("DROP SCHEMA IF EXISTS tsaheylu")
+            .await?;
 
         Ok(())
     }
