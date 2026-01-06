@@ -2,7 +2,7 @@
 # Overrides default.toml for production environment
 
 [database]
-url = "postgresql://auth_admin:auth_admin@eywaos-eywadb-zmbyvn:5432/timer_db"
+url = "postgresql://auth_admin:auth_admin@193.70.42.29:5434/timer_db"
 
 [auth]
 # MUST be set via environment variable: TIMER__AUTH__SECRET

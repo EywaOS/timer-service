@@ -2,7 +2,7 @@
 # Overrides default.toml for development environment
 
 [database]
-url = "postgresql://auth_admin:auth_admin@eywaos-eywadb-zmbyvn:5432/timer_db"
+url = "postgresql://auth_admin:auth_admin@193.70.42.29:5434/timer_db"
 
 [auth]
 secret = "dev_jwt_secret_do_not_use_in_production_at_least_64_chars_long!!!"
