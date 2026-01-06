@@ -1,6 +1,5 @@
 use eywa_axum::prelude::*;
-use serde::{Deserialize, Serialize};
-use utoipa::ToSchema;
+
 
 #[derive(Debug, Deserialize, Serialize, Clone, ToSchema)]
 pub struct ToggleTimerRequest {

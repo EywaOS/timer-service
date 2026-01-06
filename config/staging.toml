@@ -1,0 +1,13 @@
+# Staging configuration for Timer Service (Tsaheylu)
+# Overrides default.toml for staging environment
+
+[database]
+url = "postgresql://eywa_staging:{{STAGING_DB_PASSWORD}}@staging-db.example.com:5432/timer_db_staging"
+
+[auth]
+# Use a secure JWT secret in staging - set via environment variable
+secret = "{{STAGING_JWT_SECRET}}"
+issuer = "eywa-auth-service"
+
+[logging]
+level = "info"

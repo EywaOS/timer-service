@@ -1,0 +1,12 @@
+# Development configuration for Timer Service (Tsaheylu)
+# Overrides default.toml for development environment
+
+[database]
+url = "postgresql://eywa:eywa_password@localhost:5432/timer_db"
+
+[auth]
+secret = "dev_jwt_secret_do_not_use_in_production_at_least_64_chars_long!!!"
+issuer = "eywa-auth-service"
+
+[logging]
+level = "debug"

@@ -1,0 +1,265 @@
+### EYWA Timer Service API Endpoints
+### Base URL: http://localhost:3004/api/v1
+### Authentication: JWT Bearer Token (from Auth Service)
+
+# ============================================================================
+# TIMER MANAGEMENT
+# ============================================================================
+
+### Get current timer status
+GET http://localhost:3004/api/v1/timer/status
+Authorization: Bearer {{JWT_TOKEN}}
+
+### Toggle timer (start/stop) - Unified endpoint
+POST http://localhost:3004/api/v1/timer/toggle
+Authorization: Bearer {{JWT_TOKEN}}
+Content-Type: application/json
+
+{
+  "project_id": "550e8400-e29b-41d4-a716-446655440000",
+  "description": "Working on EYWA project",
+  "tags": ["backend", "rust"]
+}
+
+### Start timer (with project)
+POST http://localhost:3004/api/v1/timer/toggle
+Authorization: Bearer {{JWT_TOKEN}}
+Content-Type: application/json
+
+{
+  "project_id": "550e8400-e29b-41d4-a716-446655440000",
+  "description": "Developing timer service",
+  "tags": ["development"]
+}
+
+### Stop timer
+POST http://localhost:3004/api/v1/timer/toggle
+Authorization: Bearer {{JWT_TOKEN}}
+Content-Type: application/json
+
+{}
+
+### Start timer without project
+POST http://localhost:3004/api/v1/timer/toggle
+Authorization: Bearer {{JWT_TOKEN}}
+Content-Type: application/json
+
+{
+  "description": "General work",
+  "tags": ["admin"]
+}
+
+# ============================================================================
+# TIME ENTRIES (if implemented)
+# ============================================================================
+
+### List all time entries with pagination
+GET http://localhost:3004/api/v1/entries?page=1&limit=20&start_date=2024-01-01&end_date=2024-12-31
+Authorization: Bearer {{JWT_TOKEN}}
+
+### List time entries for specific project
+GET http://localhost:3004/api/v1/entries?project_id=550e8400-e29b-41d4-a716-446655440000&page=1&limit=20
+Authorization: Bearer {{JWT_TOKEN}}
+
+### Get time entry by ID
+GET http://localhost:3004/api/v1/entries/{{entry_id}}
+Authorization: Bearer {{JWT_TOKEN}}
+
+### Create manual time entry
+POST http://localhost:3004/api/v1/entries
+Authorization: Bearer {{JWT_TOKEN}}
+Content-Type: application/json
+
+{
+  "project_id": "550e8400-e29b-41d4-a716-446655440000",
+  "description": "Meeting with team",
+  "duration_minutes": 60,
+  "start_time": "2024-01-15T10:00:00Z",
+  "end_time": "2024-01-15T11:00:00Z",
+  "tags": ["meeting"]
+}
+
+### Update time entry
+PUT http://localhost:3004/api/v1/entries/{{entry_id}}
+Authorization: Bearer {{JWT_TOKEN}}
+Content-Type: application/json
+
+{
+  "description": "Updated meeting notes",
+  "duration_minutes": 90,
+  "tags": ["meeting", "planning"]
+}
+
+### Delete time entry
+DELETE http://localhost:3004/api/v1/entries/{{entry_id}}
+Authorization: Bearer {{JWT_TOKEN}}
+
+# ============================================================================
+# TIME ENTRY ANALYTICS (if implemented)
+# ============================================================================
+
+### Get daily time summary
+GET http://localhost:3004/api/v1/analytics/daily?date=2024-01-15
+Authorization: Bearer {{JWT_TOKEN}}
+
+### Get weekly time summary
+GET http://localhost:3004/api/v1/analytics/weekly?start_date=2024-01-15&end_date=2024-01-21
+Authorization: Bearer {{JWT_TOKEN}}
+
+### Get monthly time summary
+GET http://localhost:3004/api/v1/analytics/monthly?year=2024&month=1
+Authorization: Bearer {{JWT_TOKEN}}
+
+### Get time by project
+GET http://localhost:3004/api/v1/analytics/by-project?start_date=2024-01-01&end_date=2024-12-31
+Authorization: Bearer {{JWT_TOKEN}}
+
+### Get time by tags
+GET http://localhost:3004/api/v1/analytics/by-tags?start_date=2024-01-01&end_date=2024-12-31
+Authorization: Bearer {{JWT_TOKEN}}
+
+### Get productivity metrics
+GET http://localhost:3004/api/v1/analytics/productivity?start_date=2024-01-01&end_date=2024-12-31
+Authorization: Bearer {{JWT_TOKEN}}
+
+# ============================================================================
+# SEARCH & FILTER (if implemented)
+# ============================================================================
+
+### Search time entries
+GET http://localhost:3004/api/v1/entries/search?q=meeting&tags=work
+Authorization: Bearer {{JWT_TOKEN}}
+
+### Filter by date range
+GET http://localhost:3004/api/v1/entries?start_date=2024-01-01&end_date=2024-12-31
+Authorization: Bearer {{JWT_TOKEN}}
+
+### Filter by project and date
+GET http://localhost:3004/api/v1/entries?project_id=550e8400-e29b-41d4-a716-446655440000&start_date=2024-01-01&end_date=2024-12-31
+Authorization: Bearer {{JWT_TOKEN}}
+
+### Filter by tags
+GET http://localhost:3004/api/v1/entries?tags=backend,rust
+Authorization: Bearer {{JWT_TOKEN}}
+
+# ============================================================================
+# POMODORO (if implemented)
+# ============================================================================
+
+### Start pomodoro session
+POST http://localhost:3004/api/v1/pomodoro/start
+Authorization: Bearer {{JWT_TOKEN}}
+Content-Type: application/json
+
+{
+  "project_id": "550e8400-e29b-41d4-a716-446655440000",
+  "description": "Pomodoro session",
+  "duration_minutes": 25
+}
+
+### Skip pomodoro break
+POST http://localhost:3004/api/v1/pomodoro/skip-break
+Authorization: Bearer {{JWT_TOKEN}}
+
+### End pomodoro session
+POST http://localhost:3004/api/v1/pomodoro/end
+Authorization: Bearer {{JWT_TOKEN}}
+
+### Get pomodoro statistics
+GET http://localhost:3004/api/v1/pomodoro/stats?start_date=2024-01-01&end_date=2024-12-31
+Authorization: Bearer {{JWT_TOKEN}}
+
+### Configure pomodoro settings
+PUT http://localhost:3004/api/v1/pomodoro/settings
+Authorization: Bearer {{JWT_TOKEN}}
+Content-Type: application/json
+
+{
+  "work_duration": 25,
+  "short_break_duration": 5,
+  "long_break_duration": 15,
+  "long_break_interval": 4,
+  "auto_start_breaks": false,
+  "auto_start_pomodoros": false
+}
+
+# ============================================================================
+# BULK OPERATIONS (if implemented)
+# ============================================================================
+
+### Bulk update time entries
+POST http://localhost:3004/api/v1/entries/bulk/update
+Authorization: Bearer {{JWT_TOKEN}}
+Content-Type: application/json
+
+{
+  "entry_ids": [
+    "550e8400-e29b-41d4-a716-446655440000",
+    "660e8400-e29b-41d4-a716-446655440001"
+  ],
+  "updates": {
+    "project_id": "770e8400-e29b-41d4-a716-446655440002",
+    "tags": ["reassigned"]
+  }
+}
+
+### Bulk delete time entries
+POST http://localhost:3004/api/v1/entries/bulk/delete
+Authorization: Bearer {{JWT_TOKEN}}
+Content-Type: application/json
+
+{
+  "entry_ids": [
+    "550e8400-e29b-41d4-a716-446655440000",
+    "660e8400-e29b-41d4-a716-446655440001"
+  ]
+}
+
+### Export time entries
+GET http://localhost:3004/api/v1/entries/export?format=csv&start_date=2024-01-01&end_date=2024-12-31
+Authorization: Bearer {{JWT_TOKEN}}
+
+# ============================================================================
+# HEALTH & STATUS
+# ============================================================================
+
+### Health check
+GET http://localhost:3004/health
+
+### Liveness probe
+GET http://localhost:3004/health/live
+
+### Readiness probe
+GET http://localhost:3004/health/ready
+
+### OpenAPI documentation
+GET http://localhost:3004/api-docs
+
+### Scalar UI
+GET http://localhost:3004/scalar
+
+# ============================================================================
+# INTEGRATION EXAMPLES
+# ============================================================================
+
+### Example: Start timer for a new task
+POST http://localhost:3004/api/v1/timer/toggle
+Authorization: Bearer {{JWT_TOKEN}}
+Content-Type: application/json
+
+{
+  "project_id": "550e8400-e29b-41d4-a716-446655440000",
+  "description": "Implementing new feature",
+  "tags": ["feature", "backend"]
+}
+
+### Example: Stop timer after work is done
+POST http://localhost:3004/api/v1/timer/toggle
+Authorization: Bearer {{JWT_TOKEN}}
+Content-Type: application/json
+
+{}
+
+### Example: Check timer status before stopping
+GET http://localhost:3004/api/v1/timer/status
+Authorization: Bearer {{JWT_TOKEN}}

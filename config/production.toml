@@ -1,0 +1,13 @@
+# Production configuration for Timer Service (Tsaheylu)
+# Overrides default.toml for production environment
+
+[database]
+url = "postgresql://eywa_prod:{{PRODUCTION_DB_PASSWORD}}@production-db.example.com:5432/timer_db_prod"
+
+[auth]
+# MUST be set via environment variable: TIMER__AUTH__SECRET
+secret = "{{PRODUCTION_JWT_SECRET}}"
+issuer = "eywa-auth-service"
+
+[logging]
+level = "warn"

@@ -1,15 +1,14 @@
 use crate::model::entities::time_entries;
+use chrono::{DateTime, Utc};
 use eywa_axum::prelude::*;
-use serde::{Deserialize, Serialize};
-use utoipa::ToSchema;
 
 #[derive(Debug, Serialize, Deserialize, Clone, ToSchema)]
 pub struct TimeEntryResponse {
     pub id: Uuid,
     pub project_id: Option<Uuid>,
     pub tag_id: Option<Uuid>,
-    pub start_time: chrono::DateTime<chrono::Utc>,
-    pub end_time: Option<chrono::DateTime<chrono::Utc>>,
+    pub start_time: DateTime<Utc>,
+    pub end_time: Option<DateTime<Utc>>,
     pub duration_seconds: Option<i64>,
     pub description: Option<String>,
     pub is_pomodoro: bool,

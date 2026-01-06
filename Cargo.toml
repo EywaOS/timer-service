@@ -5,7 +5,15 @@ edition = "2024"
 
 [dependencies]
 
-# Unified Framework (re-exports: axum, tokio, serde, chrono, uuid, sea-orm, dotenvy, utoipa, tracing-subscriber)
+# Additional dependencies not re-exported by eywa-axum
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+tokio = { version = "1.48", features = ["rt-multi-thread", "macros"] }
+utoipa = { version = "5.4", features = ["axum_extras"] }
+chrono = "0.4"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+
+# Unified Framework (re-exports: axum, tokio, serde, uuid, sea-orm, dotenvy, utoipa)
 
 eywa-axum = { git = "https://github.com/EywaOS/eywa-axum" }
 

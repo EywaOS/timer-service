@@ -19,10 +19,25 @@ use controller::TimerController;
 
 #[derive(Debug, Deserialize)]
 struct TimerConfig {
-    database_url: String,
-    jwt_secret: String,
-    jwt_issuer: Option<String>,
-    rust_log: Option<String>,
+    database: DatabaseConfig,
+    auth: AuthConfigInner,
+    logging: LoggingConfig,
+}
+
+#[derive(Debug, Deserialize)]
+struct DatabaseConfig {
+    url: String,
+}
+
+#[derive(Debug, Deserialize)]
+struct AuthConfigInner {
+    secret: String,
+    issuer: Option<String>,
+}
+
+#[derive(Debug, Deserialize)]
+struct LoggingConfig {
+    level: Option<String>,
 }
 
 #[tokio::main]
@@ -31,7 +46,7 @@ async fn main() -> Result<()> {
     let config: TimerConfig = EywaConfig::load()?;
 
     // 1.1 Initialize Tracing
-    let log_level = config.rust_log.unwrap_or_else(|| "info".to_string());
+    let log_level = config.logging.level.unwrap_or_else(|| "info".to_string());
     tracing_subscriber::fmt()
         .with_target(true)
         .with_env_filter(
@@ -44,12 +59,14 @@ async fn main() -> Result<()> {
     info!("Log level: {}", log_level);
 
     let jwt_issuer = config
-        .jwt_issuer
+        .auth
+        .issuer
+        .clone()
         .unwrap_or_else(|| "eywa-auth-service".to_string());
 
     // 2. Connect to Database
     info!("Connecting to database...");
-    let db = Database::connect(&config.database_url).await?;
+    let db = Database::connect(&config.database.url).await?;
     info!("Database connected successfully");
 
     // 3. Run Migrations
@@ -60,7 +77,7 @@ async fn main() -> Result<()> {
     info!("Migrations completed");
 
     // 4. Create State
-    let state = app_state::AppState::new(db, config.jwt_secret, jwt_issuer);
+    let state = app_state::AppState::new(db, config.auth.secret, jwt_issuer);
 
     // 5. Build and Run App - Super Clean!
     EywaApp::new(state)

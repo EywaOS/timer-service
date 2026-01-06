@@ -1,4 +1,20 @@
-database_url = "postgres://eywa:eywa_secret_password@localhost:5432/eywa_auth"
-jwt_secret = "dev_secret_change_this_before_production_at_least_64_chars_long!!!"
-jwt_issuer = "eywa-auth-service"
-rust_log = "debug"
+# Default configuration for Timer Service (Tsaheylu)
+# These values can be overridden by environment-specific config files
+# or by environment variables prefixed with TIMER_
+
+[database]
+# Default database URL - override with environment variable TIMER__DATABASE__URL
+url = "postgresql://eywa:eywa_password@localhost:5432/timer_db"
+
+[auth]
+# JWT Secret - MUST be overridden in production!
+# Use: TIMER__AUTH__SECRET environment variable
+secret = "dev_jwt_secret_change_me_in_production_at_least_64_chars_long!!!"
+
+# JWT Issuer - defaults to eywa-auth-service
+issuer = "eywa-auth-service"
+
+[logging]
+# Default log level
+# Use: TIMER__LOGGING__LEVEL environment variable
+level = "info"

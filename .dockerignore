@@ -1,0 +1,56 @@
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Documentation
+README.md
+CHANGELOG.md
+*.md
+docs/
+
+# CI/CD
+.github/
+.gitlab-ci.yml
+.travis.yml
+azure-pipelines.yml
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Rust build artifacts
+target/
+Cargo.lock
+**/*.rs.bk
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Testing
+tests/
+coverage/
+
+# Logs
+*.log
+logs/
+
+# Docker
+docker-compose*.yml
+Dockerfile.dev
+.dockerignore
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Misc
+tmp/
+temp/
+*.tmp
+

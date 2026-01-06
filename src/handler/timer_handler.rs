@@ -3,7 +3,9 @@ use crate::model::entities::time_entries::{self, Entity as TimeEntries};
 use crate::model::requests::ToggleTimerRequest;
 use crate::model::responses::{TimeEntryResponse, TimerStatusResponse};
 use chrono::Utc;
-use eywa_axum::prelude::sea_orm::{ActiveModelTrait, ColumnTrait, EntityTrait, QueryFilter, Set};
+use eywa_axum::prelude::sea_orm::{
+    ActiveModelTrait, ActiveValue::Set, ColumnTrait, EntityTrait, QueryFilter,
+};
 use eywa_axum::prelude::*;
 
 /// Get current timer status
