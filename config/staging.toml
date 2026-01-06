@@ -6,7 +6,7 @@ url = "postgresql://auth_admin:auth_admin@193.70.42.29:5434/timer_db"
 
 [auth]
 # Use a secure JWT secret in staging - set via environment variable
-secret = "{{STAGING_JWT_SECRET}}"
+secret = "INSECURE_DEFAULT_STAGING_SECRET_CHANGE_ME_IN_ENV_VARS_IMMEDIATELY_MUST_BE_LONG"
 issuer = "eywa-auth-service"
 
 [logging]

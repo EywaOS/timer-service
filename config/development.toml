@@ -5,7 +5,7 @@
 url = "postgresql://auth_admin:auth_admin@193.70.42.29:5434/timer_db"
 
 [auth]
-secret = "dev_jwt_secret_do_not_use_in_production_at_least_64_chars_long!!!"
+secret = "dev_jwt_secret_change_me_in_production_at_least_64_chars_long!!!"
 issuer = "eywa-auth-service"
 
 [logging]
