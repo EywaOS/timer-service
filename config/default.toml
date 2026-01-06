@@ -4,7 +4,7 @@
 
 [database]
 # Default database URL - override with environment variable TIMER__DATABASE__URL
-url = "postgresql://eywa:eywa_password@localhost:5432/timer_db"
+url = "postgresql://auth_admin:auth_admin@eywaos-eywadb-zmbyvn:5432/timer_service"
 
 [auth]
 # JWT Secret - MUST be overridden in production!

@@ -2,7 +2,7 @@
 # Overrides default.toml for staging environment
 
 [database]
-url = "postgresql://eywa_staging:{{STAGING_DB_PASSWORD}}@staging-db.example.com:5432/timer_db_staging"
+url = "postgresql://auth_admin:auth_admin@eywaos-eywadb-zmbyvn:5432/timer_service"
 
 [auth]
 # Use a secure JWT secret in staging - set via environment variable
