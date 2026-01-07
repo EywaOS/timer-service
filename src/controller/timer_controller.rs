@@ -2,6 +2,7 @@
 //!
 //! API endpoints for timer management.
 
+use eywa_validation::ValidatedJson;
 use crate::app_state::AppState;
 use crate::handler::timer_handler;
 use crate::model::requests::ToggleTimerRequest;
@@ -59,7 +60,7 @@ impl TimerController {
     pub async fn toggle(
         state: State<AppState>,
         ext: Extension<UserId>,
-        req: Json<ToggleTimerRequest>,
+        req: ValidatedJson<ToggleTimerRequest>,
     ) -> Result<Json<TimerStatusResponse>> {
         timer_handler::toggle_timer(state, ext, req).await
     }

@@ -12,10 +12,16 @@ tokio = { version = "1.48", features = ["rt-multi-thread", "macros"] }
 utoipa = { version = "5.4", features = ["axum_extras"] }
 chrono = "0.4"
 tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+validator = { version = "0.20", features = ["derive"] }
 
 # Unified Framework (re-exports: axum, tokio, serde, uuid, sea-orm, dotenvy, utoipa)
 
-eywa-axum = { git = "https://github.com/EywaOS/eywa-axum" }
+# Unified Framework (local development)
+eywa-axum = { path = "../shared/eywa-axum" }
+eywa-audit = { path = "../shared/eywa-audit", features = ["postgres"] }
+eywa-validation = { path = "../shared/eywa-validation" }
+eywa-saga = { path = "../shared/eywa-saga" }
+eywa-errors = { path = "../shared/eywa-errors" }
 
 # Database migrations (service-specific)
 
@@ -24,3 +30,21 @@ migration = { path = "migration", package = "timer-service-migration" }
 # Nota: axum è già re-exportato da eywa-axum, quindi la dipendenza diretta non serve
 
 # Nota: sea-orm è già re-exportato da eywa-axum con le features giuste
+
+[patch.'https://github.com/EywaOS/eywa-errors']
+eywa-errors = { path = "../shared/eywa-errors" }
+
+[patch.'https://github.com/EywaOS/eywa-database']
+eywa-database = { path = "../shared/eywa-database" }
+
+[patch.'https://github.com/EywaOS/eywa-authentication']
+eywa-authentication = { path = "../shared/eywa-authentication" }
+
+[patch.'https://github.com/EywaOS/eywa-types']
+eywa-types = { path = "../shared/eywa-types" }
+
+[patch.'https://github.com/EywaOS/eywa-user-id']
+eywa-user-id = { path = "../shared/eywa-user-id" }
+
+[patch.'https://github.com/EywaOS/eywa-pagination']
+eywa-pagination = { path = "../shared/eywa-pagination" }

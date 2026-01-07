@@ -3,10 +3,12 @@ use crate::model::entities::time_entries::{self, Entity as TimeEntries};
 use crate::model::requests::ToggleTimerRequest;
 use crate::model::responses::{TimeEntryResponse, TimerStatusResponse};
 use chrono::Utc;
+use eywa_audit::{AuditAction, AuditEvent};
 use eywa_axum::prelude::sea_orm::{
     ActiveModelTrait, ActiveValue::Set, ColumnTrait, EntityTrait, QueryFilter,
 };
 use eywa_axum::prelude::*;
+use eywa_validation::ValidatedJson;
 
 /// Get current timer status
 pub async fn get_timer_status(
@@ -33,10 +35,11 @@ pub async fn get_timer_status(
 pub async fn toggle_timer(
     state: State<AppState>,
     ext: Extension<UserId>,
-    req: Json<ToggleTimerRequest>,
+    ValidatedJson(req): ValidatedJson<ToggleTimerRequest>,
 ) -> Result<Json<TimerStatusResponse>> {
     let user_id = ext.0;
     let db = state.db();
+    let audit = state.audit();
 
     // 1. Find active timer
     let active_timer = TimeEntries::find()
@@ -57,31 +60,19 @@ pub async fn toggle_timer(
         active.duration_seconds = Set(Some(duration));
         active.updated_at = Set(end_time.into());
 
-        active.update(db).await.map_err(AppError::from)?;
+        let updated_timer = active.update(db).await.map_err(AppError::from)?;
+
+        // AUDIT: Log stop event
+        audit.log(
+            AuditEvent::new(AuditAction::Update, "timer")
+                .resource_id(updated_timer.id.to_string())
+                .user_id(user_id.as_uuid())
+                .changes(&timer, &updated_timer) // Log changes
+                .metadata(serde_json::json!({ "action": "stop_timer", "duration": duration })),
+        );
     }
 
     // 3. Start new timer if details provided
-    // We consider "details provided" if at least one field is Some.
-    // However, user might want to start an empty timer ("Just tracking time").
-    // Let's decide: If request is COMPLETELY default (all Nones), do we start?
-    // If request is default, we assume it's just a "Stop" command if there was an active timer.
-    // If there was NO active timer, and request is default -> Start default timer?
-    // Let's assume if any field is provided OR it's explicit start intention.
-    // But `ToggleTimerRequest` makes intent implicit.
-    // Logic:
-    // - If params match active timer -> Stop. (Already done by "Stop active")
-    // - If params provided -> Start new.
-    // - If NO params provided -> Just Stop.
-
-    // Correction: Frontend usually sends specific "Stop" action or "Start X".
-    // "Toggle" implies if I hit the SAME button, it stops.
-    // So if req body matches active timer, we just stop.
-    // If req body differs (or is new), we start.
-
-    // Simplified logic for MVP:
-    // If `project_id` or `tag_id` or `description` is present -> Start new.
-    // If all None -> Do not start new (effectively "Stop").
-
     let should_start =
         req.project_id.is_some() || req.tag_id.is_some() || req.description.is_some();
 
@@ -98,13 +89,20 @@ pub async fn toggle_timer(
             ..Default::default()
         };
 
-        new_timer.insert(db).await.map_err(AppError::from)?;
+        // Needs to be converted to Model for auditing (after insert)
+        // Or we can construct "after" state manually.
+        // Let's insert first.
+        let created_timer = new_timer.insert(db).await.map_err(AppError::from)?;
+
+        // AUDIT: Log create event
+        audit.log(
+            AuditEvent::new(AuditAction::Create, "timer")
+                .resource_id(created_timer.id.to_string())
+                .user_id(user_id.as_uuid())
+                .changes(&(), &created_timer) // Before is empty
+                .metadata(serde_json::json!({ "action": "start_timer" })),
+        );
     }
 
-    // Return new status
-    // Re-fetch logic or construct response? Re-fetch is safer but slower.
-    // We can just construct.
-
-    // Actually, calling get_timer_status is easiest to reuse logic.
     get_timer_status(state, ext).await
 }

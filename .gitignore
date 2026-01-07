@@ -42,3 +42,6 @@ coverage/
 *.profraw
 *.profdata
 
+
+# Zenflow
+.zenflow
